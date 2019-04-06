@@ -455,3 +455,33 @@ noremap <silent> <leader>ca :cs find a <C-R><C-W><cr>
 autocmd FileType qf nnoremap <silent><buffer> p :PreviewQuickfix<cr>
 autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
 """"""""""""""""""""Gtags end"""""""""""""""""""""""""""""
+
+"###################    set file head start  #########################
+"autocmd创建新文件自动调用setfilehead()函数
+autocmd BufNewFile *.v,*.sv,*.cpp,*.c,*.h exec ":call Setfilehead()"
+func Setfilehead()
+    call append(0, '/***********************************************')
+    call append(1, '#')
+    call append(2, '#      Filename: '.expand("%"))
+    call append(3, '#')
+    call append(4, '#        Author: Double HH')
+    call append(5, '#   Description: ---')
+    call append(6, '#        Create: '.strftime("%Y-%m-%d %H:%M:%S"))
+    call append(7, '***********************************************/')
+	call append(8, '')
+endfunc
+
+"map F6 to creat file head comment
+"映射F6快捷键，生成后跳转至第9行，然后使用o进入vim的插入模式
+map <F6> :call Setfilehead()<CR>:9<CR>i
+"###################    set file head end   ##########################
+
+"###################    set comment start  #########################
+func SetComment()
+    call append(line(".")  , '/**************** BY_DOUBLE_HH start *************/')
+    call append(line(".")+1, '/**************** BY_DOUBLE_HH end   *************/')
+endfunc
+
+"映射F7快捷键，生成后跳转至下行，然后使用O进入vim的插入模式
+map <F7> :call SetComment()<CR>j<CR>O
+"###################    set comment end   ##########################
