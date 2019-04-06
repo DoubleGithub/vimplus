@@ -124,7 +124,7 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 "Plug 'rkulla/pydiction'
 Plug 'Valloric/MatchTagAlways'
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 Plug 'docunext/closetag.vim'
 Plug 'godlygeek/tabular'
 "Plug 'tpope/vim-fugitive'
@@ -153,6 +153,7 @@ Plug 'Shougo/echodoc.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'terryma/vim-expand-region'
+Plug 'skywind3000/vim-preview'
 
 call plug#end()            
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -222,9 +223,9 @@ let g:DoxygenToolkit_commentType="Qt"
 
 
 " ctags
-set tags+=/usr/include/tags
-set tags+=~/.vim/systags
-set tags+=~/.vim/x86_64-linux-gnu-systags
+"set tags+=/usr/include/tags
+"set tags+=~/.vim/systags
+"set tags+=~/.vim/x86_64-linux-gnu-systags
 
 " a.vim: .h -> .cpp or .cpp -> .h
 nnoremap <silent> <leader>a :A<cr>
@@ -425,5 +426,32 @@ func! FormatCode()
         return
     endif
 endfunc
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""Gtags start"""""""""""""""""""""""""""""
+set cscopetag 					" 使用 cscope 作为 tags 命令
+set cscopeprg='gtags-cscope' 	" 使用 gtags-cscope 代替 cscope
+ 
+"gtags.vim 设置项
+let GtagsCscope_Auto_Load = 1
+let CtagsCscope_Auto_Map = 1
+let GtagsCscope_Quiet = 1
+
+"按键映射
+nmap <F10> :Gtags <C-R><C-W><cr>
+nmap <F11> :Gtags -r <C-R><C-W><cr>
+nmap <F12> :GtagsCursor<cr>
+
+noremap <silent> <leader>cg :cs find g <C-R><C-W><cr>
+noremap <silent> <leader>cs :cs find s <C-R><C-W><cr>
+noremap <silent> <leader>cc :cs find c <C-R><C-W><cr>
+noremap <silent> <leader>ct :cs find t <C-R><C-W><cr>
+noremap <silent> <leader>ce :cs find e <C-R><C-W><cr>
+noremap <silent> <leader>cf :cs find f <C-R>=expand("<cfile>")<cr><cr>
+noremap <silent> <leader>ci :cs find i <C-R>=expand("<cfile>")<cr><cr>
+noremap <silent> <leader>cd :cs find d <C-R><C-W><cr>
+noremap <silent> <leader>ca :cs find a <C-R><C-W><cr>
+
+autocmd FileType qf nnoremap <silent><buffer> p :PreviewQuickfix<cr>
+autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
+""""""""""""""""""""Gtags end"""""""""""""""""""""""""""""
