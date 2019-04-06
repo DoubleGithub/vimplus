@@ -1,0 +1,181 @@
+set runtimepath+=c:/MySoftWare/Vim/YouCompleteMe
+source $VIMRUNTIME/vimrc_example.vim
+
+set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      if empty(&shellxquote)
+        let l:shxq_sav = ''
+        set shellxquote&
+      endif
+      let cmd = '"' . $VIMRUNTIME . '\diff"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+  if exists('l:shxq_sav')
+    let &shellxquote=l:shxq_sav
+  endif
+endfunction
+
+"显示行号
+set nu 
+"显示中文帮助
+set helplang=cn 
+" 设定窗口位置
+"winpos 5 5  
+" 设定窗口大小          
+set lines=30 columns=108     
+"设置字体和大小
+set guifont=Consolas:h14
+"Linux/Unix: set guifont=Monospace\空格14 注意这里需要对空格使用\进行转意
+"Windows: set guifont=Monospace:h14 注意这里的字体大小需要有h的标识
+" 输入的命令显示出来，看的清楚些
+set showcmd     
+" 命令行（在状态行下）的高度，默认为1，这里是2
+set cmdheight=2
+"背景使用黑色
+"set background=dark 
+" 设置配色方案
+colorscheme dream
+" 设置当文件被改动时自动载入
+set autoread
+"设置括号自动补全
+inoremap ' ''<ESC>i
+inoremap " ""<ESC>i
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+"inoremap { {<CR>}<ESC>O
+inoremap { {}<ESC>i
+
+"读：fileencoding—–> encoding 
+"显：encoding ——> termencoding 
+"写：encoding ——-> fileencoding
+"显示和内部处理的编码
+set encoding=utf-8
+"如果和上述的编码不匹配，则匹配下一个
+set fileencodings=gb18030,utf-8,gbk,gb2312,cp936,ucs-bom,shift-jis
+"终端编码方式
+set termencoding=utf-8
+"该选项是vim写入文件时采用的编码类型
+set fileencoding=gb18030
+   
+"set fileencodings=utf-8,chinese,latin-1  
+  
+"if has("win32")    
+" set fileencoding=chinese    
+"else    
+" set fileencoding=utf-8    
+"endif  
+  
+"解决菜单乱码    
+source $VIMRUNTIME/delmenu.vim   
+source $VIMRUNTIME/menu.vim  
+  
+"解决consle输出乱码  
+"language messages zh_CN.utf-8  
+
+"状态行显示的内容 
+set statusline=%F%m%r%h%w\ [SYSTEM=%{&ff}:%{&fileencoding}]\ [TYPE=%Y]\ [POS=%v,%l,%L][PERCENT=%p%%]\ %{strftime(\"%y/%m/%d\ -\ %H:%M\")}    
+" 启动显示状态行(1),总是显示状态行(2)
+set laststatus=2
+
+" 为C程序提供自动缩进
+set smartindent
+" 自动缩进
+set autoindent
+set cindent
+" Tab键的宽度
+set tabstop=4
+" 统一缩进为4
+set softtabstop=4
+set shiftwidth=4
+" 用空格代替制表符
+"set expandtab
+
+"搜索逐字符高亮
+set hlsearch
+set incsearch
+
+"highlight Pmenu    guibg=darkgrey  guifg=black 
+"highlight PmenuSel guibg=lightgrey guifg=black
+"Pmenu 是所有项的配色，PmenuSel 是选中项的配色，guibg 和 guifg 分别对应背景色和前景色。
+
+"""""""YCM 配置"""""""""""""""""""""""""
+let g:ycm_global_ycm_extra_conf = 'c:/users/double/.vim/.ycm_extra_conf.py'
+"设置不显示错误信息
+"let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_complete_in_strings=1
+let g:ycm_key_invoke_completion = '<c-z>'
+"关闭显示函数原型
+"set completeopt=menu,menuone   
+"let g:ycm_add_preview_to_completeopt = 0
+"显示函数原型后，自动关闭窗口
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+
+noremap <c-z> <NOP>
+
+let g:ycm_semantic_triggers =  {
+			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+			\ 'cs,lua,javascript': ['re!\w{2}'],
+			\ }
+let g:ycm_filetype_whitelist = { 
+			\ "c":1,
+			\ "cpp":1, 
+			\ "objc":1,
+			\ "sh":1,
+			\ "zsh":1,
+			\ "zimbu":1,
+			\ }
+            
+"""""""""""""""其他配置"""""""""""""""
+""""""""""""""""快捷键编译start"""""""""""""""""
+"C，C++ 按F5编译运行
+map <F5> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+    exec "w"
+    if &filetype == 'c'
+        exec "!g++ -Wall % -o %<"
+        exec "! %<"
+    elseif &filetype == 'cpp'
+        exec "!g++ -Wall % -o %<"
+        exec "! %<"
+    endif
+endfunc
+"C,C++的调试
+map <F4> :call Rungdb()<CR>
+func! Rungdb()
+    exec "w"
+    exec "!g++ -Wall % -g -o %<"
+    exec "!gdb %<"
+endfunc            
+""""""""""""""""""""快捷键编译end"""""""""""""""""""""
+"###################    set comment start  #########################
+func SetComment()
+    call append(line(".")  , '/*************************************')
+    call append(line(".")+1, '	FuncName:')
+    call append(line(".")+2, '	Para:')
+    call append(line(".")+3, '	Return:')
+    call append(line(".")+4, '**************************************/')
+endfunc
+
+"映射F11快捷键，生成后跳转至下行，然后使用A进入vim的插入模式
+map <F11> :call SetComment()<CR>j<CR>A
+"###################    set comment end   ##########################
