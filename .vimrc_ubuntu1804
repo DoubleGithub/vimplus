@@ -178,10 +178,11 @@ nnoremap <leader>d :bd<cr>
 " 主题
 set background=dark
 let g:onedark_termcolors=256
-colorscheme monokai
+"colorscheme monokai
+colorscheme default
 
 " airline
-let g:airline_theme="onedark"
+" let g:airline_theme="onedark"
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 if !exists('g:airline_symbols')
@@ -332,13 +333,18 @@ let g:ycm_complete_in_comments = 1
 "在字符串输入中也能补全
 let g:ycm_complete_in_strings = 1
 "注释和字符串中的文字也会被收入补全
-let g:ycm_collect_identifiers_from_comments_and_strings = 0
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
 "关闭显示函数原型
 "set completeopt=menu,menuone   
 "let g:ycm_add_preview_to_completeopt = 0
 "显示函数原型后，自动关闭窗口
 "let g:ycm_autoclose_preview_window_after_insertion = 1
 "let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_confirm_extra_conf = 0 
+let g:ycm_error_symbol = '>>'
+let g:ycm_warning_symbol = '>*'
+let g:ycm_seed_identifiers_with_syntax = 1 
 let g:ycm_key_list_select_completion = ['<c-n>', '<Down>']  " 映射按键, 没有这个会拦截掉tab, 导致其他插件的tab不能用.
 let g:ycm_key_list_previous_completion = ['<c-p>', '<Up>']
 
@@ -352,32 +358,27 @@ let g:ycm_filetype_whitelist = {
 			\ "zsh":1,
 			\ "zimbu":1,
 			\ }
-			
-let g:ycm_confirm_extra_conf = 0 
-let g:ycm_error_symbol = '>>'
-let g:ycm_warning_symbol = '>*'
-let g:ycm_seed_identifiers_with_syntax = 1 
-let g:ycm_complete_in_comments = 1 
-let g:ycm_complete_in_strings = 1 
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_semantic_triggers =  {
-  \   'c' : ['->', '.','re![_a-zA-z0-9]'],
-  \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
-  \             're!\[.*\]\s'],
-  \   'ocaml' : ['.', '#'],
-  \   'cpp,objcpp' : ['->', '.', '::','re![_a-zA-Z0-9]'],
-  \   'perl' : ['->'],
-  \   'php' : ['->', '::'],
-  \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
-  \   'ruby' : ['.', '::'],
-  \   'lua' : ['.', ':'],
-  \   'erlang' : [':'],
-  \ }
+
+" let g:ycm_semantic_triggers.c = ['->', '.', ' ', '(', '[', '&',']']
+" let g:ycm_semantic_triggers =  {
+"   \   'c' : ['->', '.','re![_a-zA-z0-9]'],
+"   \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+"   \             're!\[.*\]\s'],
+"   \   'ocaml' : ['.', '#'],
+"   \   'cpp,objcpp' : ['->', '.', '::','re![_a-zA-Z0-9]'],
+"   \   'perl' : ['->'],
+"   \   'php' : ['->', '::'],
+"   \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+"   \   'ruby' : ['.', '::'],
+"   \   'lua' : ['.', ':'],
+"   \   'erlang' : [':'],
+"   \ }
+
 let g:ycm_semantic_triggers =  {
 			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
 			\ 'cs,lua,javascript': ['re!\w{2}'],
 			\ }
-let g:ycm_semantic_triggers.c = ['->', '.', ' ', '(', '[', '&',']']
+
 nnoremap <leader>u :YcmCompleter GoToDeclaration<cr>
 nnoremap <leader>i :YcmCompleter GoToDefinition<cr>
 nnoremap <leader>o :YcmCompleter GoToInclude<cr>
