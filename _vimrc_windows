@@ -155,7 +155,7 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 "Plug 'rkulla/pydiction'
 Plug 'Valloric/MatchTagAlways'
-"Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 Plug 'docunext/closetag.vim'
 Plug 'godlygeek/tabular'
 "Plug 'tpope/vim-fugitive'
@@ -224,14 +224,18 @@ let g:airline_section_error = 0             "(ycm_error_count, syntastic-err, ec
 let g:airline_section_warning = 0           "(ycm_warning_count, syntastic-warn, whitespace)
 
 " cppfun
-nnoremap <leader>y :CopyFun<cr>
-nnoremap <leader>p :PasteFun<cr>
-nnoremap <leader><leader>fp :FormatFunParam<cr>
-nnoremap <leader><leader>if :FormatIf<cr>
+" nnoremap <leader>y :CopyFun<cr>
+" nnoremap <leader>p :PasteFun<cr>
+" nnoremap <leader><leader>fp :FormatFunParam<cr>
+" nnoremap <leader><leader>if :FormatIf<cr>
 
-" nerdtree
-nnoremap <leader>n :NERDTreeToggle<cr>
-inoremap <leader>n <esc> :NERDTreeToggle<cr>
+"""""""""""""""""""NERDTree 配置"""""""""""""""""""""""""
+" 这样的方式可能会打开vim的安装目录
+" nnoremap <leader>n :NERDTreeToggle<cr>
+" inoremap <leader>n <esc> :NERDTreeToggle<cr>
+" 这样的方式确保打开当前文件所在的目录
+nnoremap <leader>n :exec("NERDTreeToggle ".expand('%:h'))<CR>
+inoremap <leader>n <esc> :exec("NERDTreeToggle ".expand('%:h'))<CR>
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
@@ -353,12 +357,12 @@ let g:multi_cursor_quit_key            = '<Esc>'
 "python	补全
 "let g:ycm_python_binary_path = 'python'
 "let g:ycm_python_binary_path  = 'c:/MySoftWare/Python36/python'
-let g:ycm_python_binary_path  = 'd:/WorkSpace/Wing/Hnu_xshd/venv/Scripts/python'
+" let g:ycm_python_binary_path  = 'd:/WorkSpace/Wing/Hnu_xshd/venv/Scripts/python'
 "let g:ycm_python_binary_path  = 'c:/MySoftWare/Anaconda3/python'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""YCM 配置"""""""""""""""""""""""""
-let g:ycm_server_python_interpreter='c:/MySoftWare/Python27/python'
+"let g:ycm_server_python_interpreter='c:/MySoftWare/Python27/python'
 let g:ycm_global_ycm_extra_conf = '$VIM/.vim/.ycm_extra_conf.py'
 "设置不显示错误信息
 "let g:ycm_show_diagnostics_ui = 0
@@ -383,20 +387,14 @@ let g:ycm_key_list_previous_completion = ['<c-p>', '<Up>']
 
 noremap <c-z> <NOP>
 
-"let g:ycm_semantic_triggers =  {
-"			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-"			\ 'cs,lua,javascript': ['re!\w{2}'],
-"			\ }
-
 let g:ycm_filetype_whitelist = { 
 			\ "c":1,
 			\ "cpp":1, 
-			\ "python":1, 
-			\ "py":1, 
 			\ "objc":1,
+			\ "verilog":1,
+			\ "v":1,
 			\ "sh":1,
 			\ "zsh":1,
-			\ "zimbu":1,
 			\ }
 			
 let g:ycm_confirm_extra_conf = 0 
@@ -407,22 +405,28 @@ let g:ycm_seed_identifiers_with_syntax = 1
 "let g:ycm_complete_in_strings = 1 
 let g:ycm_collect_identifiers_from_tags_files = 1
 
-let g:ycm_semantic_triggers =  {
-  \   'c' : ['->', '.','re![_a-zA-z0-9]'],
-  \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
-  \             're!\[.*\]\s'],
-  \   'ocaml' : ['.', '#'],
-  \   'cpp,objcpp' : ['->', '.', '::','re![_a-zA-Z0-9]'],
-  \   'perl' : ['->'],
-  \   'php' : ['->', '::'],
-  \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
-  \   'ruby' : ['.', '::'],
-  \   'lua' : ['.', ':'],
-  \   'erlang' : [':'],
-  \ }
+" let g:ycm_semantic_triggers =  {
+"   \   'c' : ['->', '.','re![_a-zA-z0-9]'],
+"   \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+"   \             're!\[.*\]\s'],
+"   \   'ocaml' : ['.', '#'],
+"   \   'cpp,objcpp' : ['->', '.', '::','re![_a-zA-Z0-9]'],
+"   \   'perl' : ['->'],
+"   \   'php' : ['->', '::'],
+"   \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+"   \   'ruby' : ['.', '::'],
+"   \   'lua' : ['.', ':'],
+"   \   'erlang' : [':'],
+"   \ }
 
-let g:ycm_semantic_triggers.c = ['->', '.', ' ', '(', '[', '&',']']
-let g:ycm_semantic_triggers.cpp = ['->', '.', ' ', '(', '[', '&',']']
+let g:ycm_semantic_triggers =  {
+			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+			\ 'cs,lua,javascript': ['re!\w{2}'],
+			\ 'v,verilog': ['re!\w{2}'],
+			\ }
+
+" let g:ycm_semantic_triggers.c = ['->', '.', ' ', '(', '[', '&',']']
+" let g:ycm_semantic_triggers.cpp = ['->', '.', ' ', '(', '[', '&',']']
 
 nnoremap <leader>u :YcmCompleter GoToDeclaration<cr>
 nnoremap <leader>i :YcmCompleter GoToDefinition<cr>
